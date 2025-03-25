@@ -1,71 +1,58 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
+import { Observable, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 import { Quote } from './entities/quote.entity';
-import { lastValueFrom } from 'rxjs';
-import { AxiosResponse } from 'axios';
 
-interface QuotableResponse {
+interface QuoteResponse {
   _id: string;
   content: string;
   author: string;
-  tags?: string[];
 }
 
 @Injectable()
 export class QuotesService {
-  private readonly logger = new Logger(QuotesService.name);
-  private readonly QUOTABLE_API = 'https://api.quotable.io/random';
+  constructor(private readonly httpService: HttpService) {}
 
-  constructor(
-    @InjectRepository(Quote)
-    private quoteRepository: Repository<Quote>,
-    private httpService: HttpService
-  ) {}
-
-  async fetchQuoteFromAPI(): Promise<Quote> {
-    try {
-      const response: AxiosResponse<QuotableResponse> = await lastValueFrom(
-        this.httpService.get(this.QUOTABLE_API)
-      );
-
-      const quoteData = response.data;
-      const quote = new Quote();
-      quote.text = quoteData.content;
-      quote.author = quoteData.author;
-      quote.uniqueIdentifier = quoteData._id;
-      quote.category = quoteData.tags?.[0] || 'general';
-
-      return this.quoteRepository.save(quote);
-    } catch (error) {
-      this.logger.error('Failed to fetch quote from API', error);
-      throw new NotFoundException('Could not fetch quote from Quotable API');
-    }
+  findAll(): Observable<Quote[]> {
+    // Since we're using a random quote API, we'll return a single quote
+    return this.findRandom().pipe(
+      map(quote => [quote]),
+      catchError(() => of([{
+        id: 1,
+        text: 'Creativity is intelligence having fun.',
+        author: 'Albert Einstein'
+      }]))
+    );
   }
 
-  async getRandomQuote(): Promise<Quote> {
-    const quote = await this.quoteRepository.createQueryBuilder('quote')
-      .orderBy('RANDOM()')
-      .getOne();
-
-    if (!quote) {
-      // If no quotes in database, fetch from API
-      return this.fetchQuoteFromAPI();
-    }
-
-    return quote;
+  findRandom(): Observable<Quote> {
+    return this.httpService.get<QuoteResponse>('https://api.quotable.io/random').pipe(
+      map(response => ({
+        id: 1, // Since we're getting a random quote, we'll use a fixed ID
+        text: response.data.content,
+        author: response.data.author
+      })),
+      catchError(() => of({
+        id: 1,
+        text: 'Creativity is intelligence having fun.',
+        author: 'Albert Einstein'
+      }))
+    );
   }
 
-  async getAllQuotes(): Promise<Quote[]> {
-    return this.quoteRepository.find();
+  findOne(id: number): Observable<Quote> {
+    // For a random quote API, we'll just return a random quote
+    return this.findRandom();
   }
 
-  async getQuoteById(id: number): Promise<Quote> {
-    const quote = await this.quoteRepository.findOne({ where: { id } });
-    if (!quote) {
-      throw new NotFoundException(`Quote with ID ${id} not found`);
-    }
-    return quote;
+  create(quote: Quote): Observable<Quote> {
+    // Not applicable for external API
+    throw new Error('Creation not supported with external API');
+  }
+
+  remove(id: number): Observable<void> {
+    // Not applicable for external API
+    throw new Error('Removal not supported with external API');
   }
 }
