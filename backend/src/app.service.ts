@@ -1,31 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { QuotesService } from './quotes/quotes.service';
-import { lastValueFrom } from 'rxjs';
 
 @Injectable()
-export class AppService {
+export class AppService implements OnModuleInit {
   constructor(private readonly quotesService: QuotesService) {}
 
-  async getThoughtOfTheDay() {
-    try {
-      // Fetch a random quote for the day
-      const quote = await lastValueFrom(this.quotesService.findRandom());
-      return {
-        text: quote.text,
-        author: quote.author,
-        date: new Date().toISOString()
-      };
-    } catch (error) {
-      // Fallback quote if something goes wrong
-      return {
-        text: 'Creativity is intelligence having fun.',
-        author: 'Albert Einstein',
-        date: new Date().toISOString()
-      };
-    }
+  async onModuleInit() {
+    // Automatically fetch quotes when the application starts
+    await this.quotesService.fetchNewQuotes();
   }
 
-  // Keeping the original method for compatibility
   getHello(): string {
     return 'Welcome to Thought of the Day Generator!';
   }

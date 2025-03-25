@@ -1,58 +1,129 @@
-import { Injectable } from '@nestjs/common';
-import { HttpService } from '@nestjs/axios';
-import { Observable, of } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { Injectable, Logger } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { Quote } from './entities/quote.entity';
+import axios from 'axios';
 
-interface QuoteResponse {
-  _id: string;
-  content: string;
-  author: string;
+interface QuoteSource {
+  name: string;
+  url: string;
+  transform: (data: any) => { text: string; author: string };
 }
 
 @Injectable()
 export class QuotesService {
-  constructor(private readonly httpService: HttpService) {}
+  private readonly logger = new Logger(QuotesService.name);
+  private quoteSources: QuoteSource[] = [
+    {
+      name: 'quotable',
+      url: 'https://api.quotable.io/random',
+      transform: (data) => ({
+        text: data.content,
+        author: data.author
+      })
+    },
+    {
+      name: 'zen-quotes',
+      url: 'https://zenquotes.io/api/random',
+      transform: (data) => ({
+        text: data[0].q,
+        author: data[0].a
+      })
+    }
+  ];
 
-  findAll(): Observable<Quote[]> {
-    // Since we're using a random quote API, we'll return a single quote
-    return this.findRandom().pipe(
-      map(quote => [quote]),
-      catchError(() => of([{
-        id: 1,
-        text: 'Creativity is intelligence having fun.',
-        author: 'Albert Einstein'
-      }]))
-    );
+  constructor(
+    @InjectRepository(Quote)
+    private quoteRepository: Repository<Quote>
+  ) {}
+
+  async fetchNewQuotes(limit = 10): Promise<Quote[]> {
+    const allFetchedQuotes: Quote[] = [];
+
+    for (const source of this.quoteSources) {
+      try {
+        const quotes = await this.fetchQuotesFromSource(source, limit);
+        const savedQuotes = await this.saveQuotes(quotes, source.name);
+        allFetchedQuotes.push(...savedQuotes);
+      } catch (error) {
+        this.logger.error(`Failed to fetch quotes from ${source.name}`, error);
+      }
+    }
+
+    return allFetchedQuotes;
   }
 
-  findRandom(): Observable<Quote> {
-    return this.httpService.get<QuoteResponse>('https://api.quotable.io/random').pipe(
-      map(response => ({
-        id: 1, // Since we're getting a random quote, we'll use a fixed ID
-        text: response.data.content,
-        author: response.data.author
-      })),
-      catchError(() => of({
-        id: 1,
-        text: 'Creativity is intelligence having fun.',
-        author: 'Albert Einstein'
-      }))
-    );
+  private async fetchQuotesFromSource(source: QuoteSource, limit: number): Promise<Partial<Quote>[]> {
+    const quotes: Partial<Quote>[] = [];
+    
+    for (let i = 0; i < limit; i++) {
+      try {
+        const response = await axios.get(source.url);
+        const transformedQuote = source.transform(response.data);
+        
+        // Check if quote already exists
+        const existingQuote = await this.quoteRepository.findOne({
+          where: { 
+            text: transformedQuote.text, 
+            author: transformedQuote.author 
+          }
+        });
+
+        if (!existingQuote) {
+          quotes.push({
+            text: transformedQuote.text,
+            author: transformedQuote.author,
+            source: source.name,
+            lastUsedAt: null
+          });
+        }
+      } catch (error) {
+        this.logger.error(`Error fetching quote from ${source.name}`, error);
+      }
+    }
+
+    return quotes;
   }
 
-  findOne(id: number): Observable<Quote> {
-    // For a random quote API, we'll just return a random quote
-    return this.findRandom();
+  private async saveQuotes(quotes: Partial<Quote>[], sourceName: string): Promise<Quote[]> {
+    try {
+      const savedQuotes = await this.quoteRepository.save(quotes as Quote[]);
+      this.logger.log(`Saved ${savedQuotes.length} quotes from ${sourceName}`);
+      return savedQuotes;
+    } catch (error) {
+      this.logger.error(`Failed to save quotes from ${sourceName}`, error);
+      return [];
+    }
   }
 
-  create(quote: Quote): Observable<Quote> {
-    // Not applicable for external API
-    throw new Error('Creation not supported with external API');
+  async getRandomQuote(): Promise<Quote | null> {
+    try {
+      // Find a quote that hasn't been used recently
+      const quote = await this.quoteRepository
+        .createQueryBuilder('quote')
+        .orderBy('RANDOM()')
+        .getOne();
+
+      if (quote) {
+        // Update last used timestamp
+        quote.lastUsedAt = new Date();
+        await this.quoteRepository.save(quote);
+      }
+
+      return quote;
+    } catch (error) {
+      this.logger.error('Failed to retrieve random quote', error);
+      return null;
+    }
   }
 
-  remove(id: number): Observable<void> {
-    // Not applicable for external API
-    throw new Error('Removal not supported with external API');
+  // Debug method to show all quotes
+  async debugShowAllQuotes(): Promise<Quote[]> {
+    const quotes = await this.quoteRepository.find();
+    this.logger.log(`Total Quotes in Database: ${quotes.length}`);
+    quotes.forEach(quote => {
+      this.logger.log(`Quote: ${quote.text} by ${quote.author} (Source: ${quote.source})`);
+    });
+    return quotes;
   }
 }

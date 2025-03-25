@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
-import { HttpModule } from '@nestjs/axios';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { QuotesService } from './quotes.service';
 import { QuotesController } from './quotes.controller';
+import { Quote } from './entities/quote.entity';
 
 @Module({
-  imports: [HttpModule],
+  imports: [TypeOrmModule.forFeature([Quote])],
   controllers: [QuotesController],
   providers: [QuotesService],
   exports: [QuotesService]

@@ -1,17 +1,21 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
+import { QuotesService } from './quotes/quotes.service';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(
+    private readonly appService: AppService,
+    private readonly quotesService: QuotesService
+  ) {}
 
   @Get()
-  async getThoughtOfTheDay() {
-    return this.appService.getThoughtOfTheDay();
-  }
-
-  @Get('/hello')
   getHello(): string {
     return this.appService.getHello();
+  }
+
+  @Get('thought-of-the-day')
+  async getThoughtOfTheDay() {
+    return this.quotesService.getRandomQuote();
   }
 }
