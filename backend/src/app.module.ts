@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { QuotesModule } from './quotes/quotes.module';
+import { DesignModule } from './design/design.module';
 import databaseConfig from './config/database.config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
@@ -20,7 +21,8 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
       },
       inject: [ConfigService]
     }),
-    QuotesModule
+    QuotesModule,
+    DesignModule
   ],
   controllers: [AppController],
   providers: [AppService],
