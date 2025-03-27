@@ -23,4 +23,7 @@ export class Quote {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @Column('text', { nullable: true })
+  category?: string;
 }

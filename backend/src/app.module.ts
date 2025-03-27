@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { QuotesModule } from './quotes/quotes.module';
 import { DesignModule } from './design/design.module';
+import { ImageModule } from './image/image.module';
 import databaseConfig from './config/database.config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
@@ -22,7 +23,8 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
       inject: [ConfigService]
     }),
     QuotesModule,
-    DesignModule
+    DesignModule,
+    ImageModule  // Added ImageModule to the imports array
   ],
   controllers: [AppController],
   providers: [AppService],

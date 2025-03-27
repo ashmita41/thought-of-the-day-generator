@@ -55,17 +55,17 @@ export class QuotesService {
 
   private async fetchQuotesFromSource(source: QuoteSource, limit: number): Promise<Partial<Quote>[]> {
     const quotes: Partial<Quote>[] = [];
-    
+
     for (let i = 0; i < limit; i++) {
       try {
         const response = await axios.get(source.url);
         const transformedQuote = source.transform(response.data);
-        
+
         // Check if quote already exists
         const existingQuote = await this.quoteRepository.findOne({
-          where: { 
-            text: transformedQuote.text, 
-            author: transformedQuote.author 
+          where: {
+            text: transformedQuote.text,
+            author: transformedQuote.author
           }
         });
 
@@ -113,6 +113,33 @@ export class QuotesService {
       return quote;
     } catch (error) {
       this.logger.error('Failed to retrieve random quote', error);
+      return null;
+    }
+  }
+
+  async getQuoteByType(type?: string): Promise<Quote | null> {
+    // For now, it will behave like getRandomQuote()
+    return this.getRandomQuote();
+  }
+
+  async addQuoteCategory(quoteId: string, category: string): Promise<Quote | null> {
+    try {
+      const quote = await this.quoteRepository.findOne({ where: { id: quoteId } });
+      
+      if (!quote) {
+        this.logger.error(`Quote with ID ${quoteId} not found`);
+        return null;
+      }
+
+      // Update category
+      quote.category = category;
+      
+      const updatedQuote = await this.quoteRepository.save(quote);
+      this.logger.log(`Added category ${category} to quote ID ${quoteId}`);
+      
+      return updatedQuote;
+    } catch (error) {
+      this.logger.error(`Failed to add category to quote ID ${quoteId}`, error);
       return null;
     }
   }
