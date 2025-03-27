@@ -1,24 +1,23 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import * as path from 'path';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  
+  // Enable CORS
+  app.enableCors({
+    origin: 'http://localhost:3000', // Your frontend URL
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
 
-  // Enable CORS if needed
-  app.enableCors();
+  // Serve static files from generated-images directory
+  app.useStaticAssets(path.join(process.cwd(), 'generated-images'), {
+    prefix: '/images/',
+  });
 
-  // Add validation pipe with comprehensive options
-  app.useGlobalPipes(new ValidationPipe({
-    transform: true,
-    whitelist: true,
-    forbidNonWhitelisted: true,
-    transformOptions: {
-      enableImplicitConversion: true
-    }
-  }));
-
-  await app.listen(3000);
-  console.log(`Application is running on: ${await app.getUrl()}`);
+  await app.listen(3001);
 }
 bootstrap();
