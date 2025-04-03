@@ -1,4 +1,3 @@
-// src/design/repositories/design-config.repository.ts
 import { Injectable } from '@nestjs/common';
 import { DesignConfigsProvider } from '../config/design-configs.provider';
 import { DesignConfig } from '../interfaces/design-config.interface';

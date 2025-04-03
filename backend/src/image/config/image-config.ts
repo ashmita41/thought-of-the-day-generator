@@ -1,5 +1,5 @@
 export const IMAGE_CONFIG = {
-    WIDTH: 1080,  // Instagram square post size
+    WIDTH: 1080,  // square post size
     HEIGHT: 1080,
     MARGINS: {
       HORIZONTAL: 100,
