@@ -13,7 +13,6 @@ async function bootstrap() {
     credentials: true,
   });
 
-  // Serve static files from generated-images directory
   app.useStaticAssets(path.join(process.cwd(), 'generated-images'), {
     prefix: '/images/',
   });
