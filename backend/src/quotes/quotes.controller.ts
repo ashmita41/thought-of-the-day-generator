@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, NotFoundException } from '@nestjs/common';
 import { QuotesService } from './quotes.service';
 import { Quote } from './entities/quote.entity';
 
@@ -6,7 +6,14 @@ import { Quote } from './entities/quote.entity';
 export class QuotesController {
   constructor(private readonly quotesService: QuotesService) {}
 
-  // Existing methods...
+   @Get('random')
+  async getRandomQuote(): Promise<Quote> {
+    const quote = await this.quotesService.getRandomQuote();
+    if (!quote) {
+      throw new NotFoundException('No quotes available');
+    }
+    return quote;
+  }
 
   @Get('debug')
   async debugQuotes(): Promise<Quote[]> {
