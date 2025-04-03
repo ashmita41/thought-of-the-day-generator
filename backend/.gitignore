@@ -3,6 +3,8 @@
 /node_modules
 /build
 
+/generated-images
+
 # Logs
 logs
 *.log
