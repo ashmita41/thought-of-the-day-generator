@@ -1,4 +1,3 @@
-// src/design/design.module.ts
 import { Module } from '@nestjs/common';
 import { DesignService } from './services/design.service';
 import { DesignController } from './controllers/design.controller';

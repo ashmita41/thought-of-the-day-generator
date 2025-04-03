@@ -24,7 +24,7 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
     }),
     QuotesModule,
     DesignModule,
-    ImageModule  // Added ImageModule to the imports array
+    ImageModule 
   ],
   controllers: [AppController],
   providers: [AppService],

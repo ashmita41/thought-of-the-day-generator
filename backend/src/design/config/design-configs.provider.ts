@@ -1,4 +1,3 @@
-// src/design/config/design-configs.provider.ts
 import { Injectable } from '@nestjs/common';
 import { DesignConfig } from '../interfaces/design-config.interface';
 
@@ -11,13 +10,13 @@ export class DesignConfigsProvider {
   }
   
   private initializeConfigs(): void {
-    // Monday config
+    // Monday config - Vibrant Blue/Purple Gradient
     this.designConfigs.set('monday', {
       designId: 'fixed-monday-design',
       mode: 'fixed',
       background: {
-        color: '#E8F4F8', // Light Blue
-        type: 'solid'
+        color: '["#4158D0", "#C850C0"]', // Vibrant blue to purple gradient
+        type: 'gradient'
       },
       layout: {
         type: 'centered',
@@ -30,36 +29,36 @@ export class DesignConfigsProvider {
       },
       typography: {
         title: {
-          fontFamily: 'Montserrat', // Modern sans-serif font
+          fontFamily: 'Montserrat',
           fontSize: 28,
-          color: '#000000',
+          color: '#FFFFFF', // White for better contrast
           weight: 'bold',
           alignment: 'center'
         },
         quote: {
           fontFamily: 'Georgia',
           fontSize: 22,
-          color: '#2C3E50',
+          color: '#FFFFFF',
           weight: 'normal',
           alignment: 'center'
         },
         author: {
           fontFamily: 'Courier New',
           fontSize: 16,
-          color: '#34495E',
+          color: '#F0F0F0',
           weight: 'light',
           alignment: 'center'
         }
       }
     });
     
-    // Tuesday config
+    // Tuesday config - Sunny Yellow/Orange
     this.designConfigs.set('tuesday', {
       designId: 'fixed-tuesday-design',
       mode: 'fixed',
       background: {
-        color: '#F0E6FF', // Light Purple
-        type: 'solid'
+        color: '["#FFCC70", "#FF9EB1"]', // Sunny yellow to pink
+        type: 'gradient'
       },
       layout: {
         type: 'centered',
@@ -72,7 +71,7 @@ export class DesignConfigsProvider {
       },
       typography: {
         title: {
-          fontFamily: 'Playfair Display', // Elegant serif font
+          fontFamily: 'Playfair Display',
           fontSize: 28,
           color: '#2C3E50',
           weight: 'bold',
@@ -95,13 +94,13 @@ export class DesignConfigsProvider {
       }
     });
     
-    // Wednesday config
+    // Wednesday config - Fresh Mint/Teal
     this.designConfigs.set('wednesday', {
       designId: 'fixed-wednesday-design',
       mode: 'fixed',
       background: {
-        color: '#E6F2E6', // Light Green
-        type: 'solid'
+        color: '["#0CCDA3", "#1DFFC8"]', // Fresh mint gradient
+        type: 'gradient'
       },
       layout: {
         type: 'centered',
@@ -114,7 +113,7 @@ export class DesignConfigsProvider {
       },
       typography: {
         title: {
-          fontFamily: 'Lato', // Clean modern font
+          fontFamily: 'Lato',
           fontSize: 28,
           color: '#1A1A1A',
           weight: 'bold',
@@ -137,13 +136,13 @@ export class DesignConfigsProvider {
       }
     });
     
-    // Thursday config
+    // Thursday config - Vibrant Orange/Pink
     this.designConfigs.set('thursday', {
       designId: 'fixed-thursday-design',
       mode: 'fixed',
       background: {
-        color: '#FFF0E6', // Light Orange
-        type: 'solid'
+        color: '["#FF7676", "#F54EA2"]', // Vibrant orange to pink
+        type: 'gradient'
       },
       layout: {
         type: 'centered',
@@ -156,36 +155,36 @@ export class DesignConfigsProvider {
       },
       typography: {
         title: {
-          fontFamily: 'Merriweather', // Classic serif font
+          fontFamily: 'Merriweather',
           fontSize: 28,
-          color: '#2C3E50',
+          color: '#FFFFFF',
           weight: 'bold',
           alignment: 'center'
         },
         quote: {
           fontFamily: 'Verdana',
           fontSize: 22,
-          color: '#4A4A4A',
+          color: '#FFFFFF',
           weight: 'normal',
           alignment: 'center'
         },
         author: {
           fontFamily: 'Palatino Linotype',
           fontSize: 16,
-          color: '#3D3D3D',
+          color: '#F0F0F0',
           weight: 'light',
           alignment: 'center'
         }
       }
     });
     
-    // Friday config
+    // Friday config - Cheerful Pink/Purple
     this.designConfigs.set('friday', {
       designId: 'fixed-friday-design',
       mode: 'fixed',
       background: {
-        color: '#F4E1D2', // Light Peach
-        type: 'solid'
+        color: '["#FF61D2", "#FE9090"]', // Cheerful pink to light orange
+        type: 'gradient'
       },
       layout: {
         type: 'centered',
@@ -198,36 +197,36 @@ export class DesignConfigsProvider {
       },
       typography: {
         title: {
-          fontFamily: 'Roboto Slab', // Modern slab serif
+          fontFamily: 'Roboto Slab',
           fontSize: 28,
-          color: '#1A1A1A',
+          color: '#FFFFFF',
           weight: 'bold',
           alignment: 'center'
         },
         quote: {
           fontFamily: 'Georgia',
           fontSize: 22,
-          color: '#2D3436',
+          color: '#FFFFFF',
           weight: 'normal',
           alignment: 'center'
         },
         author: {
           fontFamily: 'Arial',
           fontSize: 16,
-          color: '#34495E',
+          color: '#F0F0F0',
           weight: 'light',
           alignment: 'center'
         }
       }
     });
     
-    // Saturday config
+    // Saturday config - Electric Blue/Cyan
     this.designConfigs.set('saturday', {
       designId: 'fixed-saturday-design',
       mode: 'fixed',
       background: {
-        color: '#E8F4F8', // Light Blue
-        type: 'solid'
+        color: '["#0061FF", "#60EFFF"]', // Electric blue to cyan
+        type: 'gradient'
       },
       layout: {
         type: 'centered',
@@ -240,36 +239,36 @@ export class DesignConfigsProvider {
       },
       typography: {
         title: {
-          fontFamily: 'Open Sans', // Clean modern sans-serif
+          fontFamily: 'Open Sans',
           fontSize: 28,
-          color: '#2C3E50',
+          color: '#FFFFFF',
           weight: 'bold',
           alignment: 'center'
         },
         quote: {
           fontFamily: 'Verdana',
           fontSize: 22,
-          color: '#4A4A4A',
+          color: '#FFFFFF',
           weight: 'normal',
           alignment: 'center'
         },
         author: {
           fontFamily: 'Trebuchet MS',
           fontSize: 16,
-          color: '#3D3D3D',
+          color: '#F0F0F0',
           weight: 'light',
           alignment: 'center'
         }
       }
     });
     
-    // Sunday config
+    // Sunday config - Dreamy Purple/Pink
     this.designConfigs.set('sunday', {
       designId: 'fixed-sunday-design',
       mode: 'fixed',
       background: {
-        color: '#F0E6FF', // Light Purple
-        type: 'solid'
+        color: '["#764BA2", "#FF7EB3"]', // Dreamy purple to pink
+        type: 'gradient'
       },
       layout: {
         type: 'centered',
@@ -282,23 +281,23 @@ export class DesignConfigsProvider {
       },
       typography: {
         title: {
-          fontFamily: 'Libre Baskerville', // Classic elegant serif
+          fontFamily: 'Libre Baskerville',
           fontSize: 28,
-          color: '#1A1A1A',
+          color: '#FFFFFF',
           weight: 'bold',
           alignment: 'center'
         },
         quote: {
           fontFamily: 'Palatino Linotype',
           fontSize: 22,
-          color: '#2D3436',
+          color: '#FFFFFF',
           weight: 'normal',
           alignment: 'center'
         },
         author: {
           fontFamily: 'Georgia',
           fontSize: 16,
-          color: '#34495E',
+          color: '#F0F0F0',
           weight: 'light',
           alignment: 'center'
         }
@@ -311,10 +310,16 @@ export class DesignConfigsProvider {
   }
   
   getRandomDesign(): DesignConfig {
-    // Enhanced fonts for random designs
-    const backgroundColors = [
-      '#F5F5F5', '#E8F4F8', '#F0E6FF', 
-      '#E6F2E6', '#FFF0E6', '#F4E1D2'
+    // Enhanced fonts and vibrant colors for random designs
+    const backgroundGradients = [
+      '["#FF9A8B", "#FF6A88"]', // Coral to pink
+      '["#42E695", "#3BB2B8"]', // Mint to teal
+      '["#8A2387", "#E94057", "#F27121"]', // Purple to red to orange
+      '["#1FA2FF", "#12D8FA", "#A6FFCB"]', // Blue to cyan to mint
+      '["#FF61D2", "#FE9090"]', // Pink to light orange
+      '["#4158D0", "#C850C0"]', // Blue to purple
+      '["#0061FF", "#60EFFF"]', // Blue to cyan
+      '["#6713D2", "#CC208E"]'  // Deep purple to magenta
     ];
     
     const titleFontFamilies = [
@@ -330,16 +335,16 @@ export class DesignConfigsProvider {
     ];
     
     const textColors = [
-      '#2C3E50', '#34495E', '#4A4A4A', 
-      '#1A1A1A', '#3D3D3D', '#2D3436'
+      '#FFFFFF', '#F0F0F0', '#F5F5F5', 
+      '#E8E8E8', '#2C3E50', '#34495E'
     ];
 
     return {
       designId: `random-design-${Math.floor(Math.random() * 100)}`,
       mode: 'random',
       background: {
-        color: backgroundColors[Math.floor(Math.random() * backgroundColors.length)],
-        type: 'solid'
+        color: backgroundGradients[Math.floor(Math.random() * backgroundGradients.length)],
+        type: 'gradient'
       },
       layout: {
         type: 'centered',
@@ -354,7 +359,7 @@ export class DesignConfigsProvider {
         title: {
           fontFamily: titleFontFamilies[Math.floor(Math.random() * titleFontFamilies.length)],
           fontSize: 28,
-          color: '#000000',
+          color: '#FFFFFF',
           weight: 'bold',
           alignment: 'center'
         },

@@ -16,7 +16,7 @@ export class ImageService {
     try {
       const { quote, author, design } = options;
       
-      // Create canvas with Instagram square post size
+      // Create canvas with square post size
       const canvas = createCanvas(IMAGE_CONFIG.WIDTH, IMAGE_CONFIG.HEIGHT);
       const ctx = canvas.getContext('2d');
       
@@ -28,8 +28,8 @@ export class ImageService {
         ctx.fillRect(0, 0, canvas.width, canvas.height);
       }
       
-      // Set title text style - INCREASED SIZE AND WEIGHT
-      const titleFontSize = 60; // Increased from 48
+      // Set title text style
+      const titleFontSize = 60; 
       ctx.font = `bold ${titleFontSize}px ${design.typography.title.fontFamily || 'Arial'}`;
       ctx.fillStyle = design.typography.title.color || '#000000';
       const titleText = 'Thought for the Day';
@@ -40,7 +40,7 @@ export class ImageService {
       ctx.font = `${design.typography.quote.weight || 'normal'} ${quoteFontSize}px ${design.typography.quote.fontFamily || 'Arial'}`;
       
       // Calculate max width for text with proper padding
-      const maxTextWidth = canvas.width - (IMAGE_CONFIG.MARGINS.HORIZONTAL * 2) - 180; // Increased padding
+      const maxTextWidth = canvas.width - (IMAGE_CONFIG.MARGINS.HORIZONTAL * 2) - 180; 
       
       // Wrap text
       const wrappedQuote = this.textUtilsService.wrapText(
@@ -54,13 +54,13 @@ export class ImageService {
       const titleHeight = titleFontSize;
       const quoteLineHeight = quoteFontSize * 1.2;
       const authorHeight = 40;
-      const titleToQuoteGap = 60; // Reduced from 80
-      const quoteToAuthorGap = 50; // Reduced from 60
+      const titleToQuoteGap = 60; 
+      const quoteToAuthorGap = 50; 
       
       // Calculate card dimensions with proper padding
       const cardPadding = {
-        vertical: 60,  // Increased vertical padding
-        horizontal: 50 // Horizontal padding
+        vertical: 60,  
+        horizontal: 50 
       };
       
       const quoteTextHeight = wrappedQuote.length * quoteLineHeight;
@@ -116,7 +116,7 @@ export class ImageService {
       });
       
       // Render author with italic style - BETTER POSITIONED
-      const authorFontSize = 38; // Slightly increased
+      const authorFontSize = 38; 
       ctx.font = `italic ${authorFontSize}px ${design.typography.author.fontFamily || 'Arial'}`;
       ctx.fillStyle = design.typography.author.color || '#555555';
       
@@ -132,7 +132,7 @@ export class ImageService {
         authorY
       );
       
-      // Draw decorative elements based on day (optional)
+      // Draw decorative elements based on day 
       if (design.designId.includes('monday')) {
         this.addMondayDecoration(ctx, canvas);
       } else if (design.designId.includes('tuesday')) {
