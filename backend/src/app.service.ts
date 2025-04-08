@@ -1,13 +1,15 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { QuotesService } from './quotes/quotes.service';
 
 @Injectable()
 export class AppService implements OnModuleInit {
+  private readonly logger = new Logger(AppService.name);
+  
   constructor(private readonly quotesService: QuotesService) {}
 
   async onModuleInit() {
-    // Automatically fetch quotes when the application starts
-    await this.quotesService.fetchNewQuotes();
+    this.logger.log('Initializing App Service...');
+    // Nothing to do here since QuotesService handles initialization
   }
 
   getHello(): string {
