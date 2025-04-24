@@ -8,7 +8,7 @@ export type Word = {
   partOfSpeech: string | null;
   definition: string;
   example: string | null;
-  source: string;
+  source: string | null;
   lastUsedAt: Date | null;
   usageCount: number;
   createdAt: Date;

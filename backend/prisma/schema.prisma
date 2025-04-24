@@ -19,3 +19,17 @@ model Quote {
 
   @@unique([text, author])
 }
+
+model Word {
+  id          String    @id @default(uuid())
+  word        String    @unique
+  definition  String
+  partOfSpeech String?
+  example     String?
+  phonetic    String?
+  audio       String?
+  source      String?
+  lastUsedAt  DateTime?
+  usageCount  Int       @default(0)
+  createdAt   DateTime  @default(now())
+}

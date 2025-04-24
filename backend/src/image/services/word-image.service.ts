@@ -21,9 +21,12 @@ export class WordImageService implements OnModuleInit {
   constructor(private textUtilsService: TextUtilsService) {
     // We don't need to initialize with S3 service since we're using local storage
     // Just ensure our directories exist
-    ImageStorage.ensureDirectoriesExist().catch((err) => {
-      this.logger.error(`Failed to ensure directories exist: ${err.message}`);
-    });
+    ImageStorage.ensureDirectoriesExist();
+    try {
+      // You can put any initialization code that might throw errors here
+    } catch (err) {
+      this.logger.error(`Failed to initialize WordImageService: ${err.message}`);
+    }
   }
 
   onModuleInit() {
